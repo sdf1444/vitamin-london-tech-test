@@ -40,6 +40,7 @@ const Calendar = () => {
       <table>
         <thead>
           <tr>
+            <th className='blank-header-cell'></th>
             <th className='day'>Monday</th>
             <th className='day'>Tuesday</th>
             <th className='day'>Wednesday</th>
