@@ -10,8 +10,8 @@ interface Event {
 const Calendar = () => {
   const [formData, setFormData] = useState({
     name: '',
-    day: 'Monday',
-    time: '09:00'
+    day: '',
+    time: ''
   })
 
   // state for array of events, initially empty
@@ -27,9 +27,11 @@ const Calendar = () => {
 
   // function to handle form submission
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault() // prevent page refresh on form submit
-    setEvents([...events, { ...formData }])
-    setFormData({ name: '', day: 'Monday', time: '09:00' })
+    e.preventDefault(); // prevent page refresh on form submit
+    if(formData.day !== "" && formData.time !== ""){
+      setEvents([...events, { ...formData }]);
+      setFormData({ name: '', day: '', time: '' });
+    }
   }
 
   return (
@@ -91,6 +93,7 @@ const Calendar = () => {
           />
           <h4>Day</h4>
           <select name="day" value={formData.day} onChange={handleChange}>
+            <option value="">-- Select a Day --</option>
             <option value="Monday">Monday</option>
             <option value="Tuesday">Tuesday</option>
             <option value="Wednesday">Wednesday</option>
@@ -99,6 +102,7 @@ const Calendar = () => {
           </select>
           <h4>Time</h4>
           <select name="time" value={formData.time} onChange={handleChange}>
+            <option value="">-- Select a Time --</option>
             <option value="09:00">09:00</option>
             <option value="10:00">10:00</option>
             <option value="11:00">11:00</option>
