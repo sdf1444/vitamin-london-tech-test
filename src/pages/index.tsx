@@ -102,7 +102,7 @@ const Calendar = () => {
           <h4>Time</h4>
           <select name="time" value={formData.time} onChange={handleChange}>
             <option value="">-- Select a Time --</option>
-            <option value="09:00">09:00</option>
+            <option value="9:00">9:00</option>            
             <option value="10:00">10:00</option>
             <option value="11:00">11:00</option>
             <option value="12:00">12:00</option>
