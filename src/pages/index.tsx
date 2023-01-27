@@ -1,41 +1,44 @@
-import React, { useEffect, useState } from 'react';
 
 interface Event {
+  // interface for events with name, day, and time properties
   name: string
   day: string
-  startTime: string
-  endTime: string
+  time: string
 }
 
 const Calendar = () => {
   const [formData, setFormData] = useState({
     name: '',
     day: '',
-    startTime: '',
-    endTime: ''
-  });
+    time: ''
+  })
 
+  // state for array of events, initially empty
   const [events, setEvents] = useState<Event[]>([])
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  // function to handle form input changes
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
-    });
+    })
   }
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    setEvents([...events, { ...formData }]);
-    setFormData({ name: '', day: '', startTime: '', endTime: '' });
+  // function to handle form submission
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault(); // prevent page refresh on form submit
+    if (formData.day !== "" && formData.time !== "") {
+      setEvents([...events, { ...formData }]);
+      setFormData({ name: '', day: '', time: '' });
+    }
   }
 
   return (
     <>
+      {/* Calendar table */}
       <table>
         <thead>
           <tr>
-            <th className='blank-header'></th>
             <th className='day'>Monday</th>
             <th className='day'>Tuesday</th>
             <th className='day'>Wednesday</th>
@@ -44,20 +47,19 @@ const Calendar = () => {
           </tr>
         </thead>
         <tbody>
+          {/* Iterate through times to create rows */}
           {Array.from({ length: 9 }, (_, i) => i + 9).map((time) => (
             <tr key={time}>
               <td className='time'>{time}:00</td>
+              {/* Iterate through days to create cells */}
               {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'].map((day) => {
+                // filter events by time and day
                 const eventsForTimeAndDay = events.filter(
-                  (event) => {
-                    const timeStamp = new Date("1970-01-01T" + (time < 10 ? '0' + time : time) + ":00" + "Z").getTime();
-                    const startTime = new Date("1970-01-01T" + (Number(event.startTime) < 10 ? '0' + event.startTime : event.startTime) + "Z").getTime();
-                    const endTime = new Date("1970-01-01T" + (Number(event.endTime) < 10 ? '0' + event.endTime : event.endTime) + "Z").getTime();
-                    return startTime <= timeStamp && endTime > timeStamp && event.day == day
-                  }
+                  (event) => event.time === `${time}:00` && event.day === day
                 )
                 return (
                   <td key={day} className='cell'>
+                    {/* event container */}
                     <div className='event-container'>
                       {eventsForTimeAndDay.map((event, i) => (
                         <div
@@ -76,6 +78,7 @@ const Calendar = () => {
           ))}
         </tbody>
       </table>
+      {/* form to add events */}
       <form onSubmit={handleSubmit}>
         <div className="form-container">
           <h3>Add Event</h3>
@@ -95,20 +98,19 @@ const Calendar = () => {
             <option value="Thursday">Thursday</option>
             <option value="Friday">Friday</option>
           </select>
-          <h4>Start Time</h4>
-          <input
-            type="time"
-            name="startTime"
-            value={formData.startTime}
-            onChange={handleChange}
-          />
-          <h4>End Time</h4>
-          <input
-            type="time"
-            name="endTime"
-            value={formData.endTime}
-            onChange={handleChange}
-          />
+          <h4>Time</h4>
+          <select name="time" value={formData.time} onChange={handleChange}>
+            <option value="">-- Select a Time --</option>
+            <option value="09:00">09:00</option>
+            <option value="10:00">10:00</option>
+            <option value="11:00">11:00</option>
+            <option value="12:00">12:00</option>
+            <option value="13:00">13:00</option>
+            <option value="14:00">14:00</option>
+            <option value="15:00">15:00</option>
+            <option value="16:00">16:00</option>
+            <option value="17:00">17:00</option>
+          </select>
           <button type="submit">Add</button>
         </div>
       </form>
